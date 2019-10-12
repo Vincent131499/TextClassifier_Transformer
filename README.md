@@ -26,3 +26,7 @@ step5:api请求-预测<br>
 <br> `下面将针对以上两个模式的运行方式进行详细说明。`<br>
 ## 模式1：线下实时预测
 ### Step1：数据准备
+为了快速实验项目效果，这里使用了样本规模较小的手机评论数据，数据比较简单，有三个分类：-1（差评）、0（中评）、1（好评），数据样例如下所示：<br>
+![数据描述](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/dataset_desc.jpg)
+ps:本项目中已将其拆分成了train.tsv、dev.txv、test.tsv三个文件<br>
+### Step2:模型训练
