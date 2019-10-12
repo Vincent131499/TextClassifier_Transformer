@@ -30,3 +30,56 @@ step5:api请求-预测<br>
 ![数据描述](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/dataset_desc.jpg)
 ps:本项目中已将其拆分成了train.tsv、dev.txv、test.tsv三个文件<br>
 ### Step2:模型训练
+训练命令：<br>
+```Bash
+bash train.sh
+```
+详细说明：训练模型直接使用bert微调的方式进行训练，对应的程序文件为run_classifier_serving.py。关于微调bert进行训练的代码网上介绍的
+很多，这里就不一一介绍。主要是创建针对该任务的Processor-SentimentProcessor，在这个processor的_create_examples()和get_labels()函数自定义，如下所示：
+```Python
+class SetimentProcessor(DataProcessor):
+  def get_train_examples(self, data_dir):
+    """See base class."""
+    return self._create_examples(
+        self._read_tsv(os.path.join(data_dir, "train.tsv")), "train")
+
+  def get_dev_examples(self, data_dir):
+    """See base class."""
+    return self._create_examples(
+        self._read_tsv(os.path.join(data_dir, "dev.tsv")), "dev")
+
+  def get_test_examples(self, data_dir):
+    """See base class."""
+    return self._create_examples(
+        self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
+
+  def get_labels(self):
+    """See base class."""
+
+    """
+    if not os.path.exists(os.path.join(FLAGS.output_dir, 'label_list.pkl')):
+        with codecs.open(os.path.join(FLAGS.output_dir, 'label_list.pkl'), 'wb') as fd:
+            pickle.dump(self.labels, fd)
+    """
+    return ["-1", "0", "1"]
+
+  def _create_examples(self, lines, set_type):
+    """Creates examples for the training and dev sets."""
+    examples = []
+    for (i, line) in enumerate(lines):
+      if i == 0: 
+        continue
+      guid = "%s-%s" % (set_type, i)
+
+      #debug (by xmxoxo)
+      #print("read line: No.%d" % i)
+
+      text_a = tokenization.convert_to_unicode(line[1])
+      if set_type == "test":
+        label = "0"
+      else:
+        label = tokenization.convert_to_unicode(line[0])
+      examples.append(
+          InputExample(guid=guid, text_a=text_a, label=label))
+    return examples
+```
