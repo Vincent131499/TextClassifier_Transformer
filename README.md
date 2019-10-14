@@ -111,7 +111,7 @@ def serving_input_fn():
         'input_ids': input_ids,
         'input_mask': input_mask,
         'segment_ids': segment_ids,
-    })()
+    })
     return input_fn
 ```
 继而在run_classifier_serving中定义do_export选项：
