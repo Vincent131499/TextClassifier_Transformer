@@ -19,7 +19,7 @@ step1:数据准备<br>
 step2:模型训练<br>
 step3:模型转换<br>
 step4:服务部署<br>
-step5:api请求-预测<br>
+step5:应用端<br>
 ### 注意事项
 1.如果你只是想体验从模型训练到本地线下预测这一套流程，只需要按照模式1依次执行即可<br>
 2.若你想想体验从模型训练到模型部署整个流程，则需要按照模式2依次执行<br>
@@ -33,6 +33,13 @@ ps:本项目中已将其拆分成了train.tsv、dev.txv、test.tsv三个文件<b
 训练命令：<br>
 ```Bash
 bash train.sh
+```
+train.sh参数说明：
+```Bash
+export BERT_BASE_DIR=./chinese_roberta_zh_l12 #指定预训练的语言模型所在路径
+export DATA_DIR=./dat #指定数据集所在路径
+export TRAINED_CLASSIFIER=./output #训练的模型输出路径
+export MODEL_NAME=mobile_0_roberta_base #训练的模型命名
 ```
 详细说明：训练模型直接使用bert微调的方式进行训练，对应的程序文件为run_classifier_serving.py。关于微调bert进行训练的代码网上介绍的
 很多，这里就不一一介绍。主要是创建针对该任务的Processor即：SentimentProcessor，在这个processor的_create_examples()和get_labels()函数自定义，如下所示：
@@ -98,8 +105,22 @@ if not os.path.exists(output_label2id_file):
 ```Bash
 bash export.sh
 ```
-会在指定的exported目录下生成以一个时间戳命名的模型目录。
-详细说明：在run_classifier_serving中定义serving_input_fn()函数，如下：
+export.sh参数说明：
+```Bash
+#以下四个参数应与train.sh中设置的值保持一致
+export BERT_BASE_DIR=./chinese_roberta_zh_l12
+export DATA_DIR=./dat
+export TRAINED_CLASSIFIER=./output
+export MODEL_NAME=mobile_0_roberta_base
+```
+会在指定的exported目录下生成以一个时间戳命名的模型目录。<br>
+详细说明：详细说明：run_classifier.py 主要设计为单次运行的目的，如果把 do_predict 参数设置成 True，倒也确实可以预测，但输入样本是基于文件的，并且不支持将模型持久化在内存里进行 serving，因此需要自己改一些代码，达到两个目的：<br>
+（1）允许将模型加载到内存里，即：允许一次加载，多次调用。<br>
+（2）允许读取非文件中的样本进行预测。譬如从标准输入流读取样本输入。<br>
+* 将模型加载到内存里<br>
+run_classifier.py 的 859 行加载了模型为 estimator 变量，但是遗憾的是 estimator 原生并不支持一次加载，多次预测。参见：https://guillaumegenthial.github.io/serving-tensorflow-estimator.html。
+因此需要使用 estimator.export_saved_model() 方法把 estimator 重新导出成 tf.saved_model。
+代码参考了 https://github.com/bigboNed3/bert_serving）,在run_classifier_serving中定义serving_input_fn()函数，如下：<br>
 ```Python
 def serving_input_fn():
     label_ids = tf.placeholder(tf.int32, [None], name='label_ids')
@@ -124,5 +145,56 @@ if do_export:
 运行test_serving.py文件，即可进行线下实时预测。<br>
 运行效果如下所示：<br>
 ![运行效果图]<br>
+详细说明：导出模型后，就不需要第 859 行那个 estimator 对象了，可以自行从刚刚的导出模型目录加载模型，代码如下：<br>
+```Python
+predict_fn = tf.contrib.predictor.from_saved_model('/exported/1571054350')
+```
+基于上面的 predict_fn 变量，就可以直接进行预测了。下面是一个从标准输入流读取问题样本，并预测分类的样例代码：<br>
+```Python
+while True:
+    question = input("> ")
+    predict_example = InputExample("id", question, None, '某固定伪标记')
+    feature = convert_single_example(100, predict_example, label_list,
+                                        FLAGS.max_seq_length, tokenizer)
+ 
+    prediction = predict_fn({
+        "input_ids":[feature.input_ids],
+        "input_mask":[feature.input_mask],
+        "segment_ids":[feature.segment_ids],
+        "label_ids":[feature.label_id],
+    })
+    probabilities = prediction["probabilities"]
+    label = label_list[probabilities.argmax()]
+    print(label)
+```
 ## 模式2：服务端实时预测
+首先针对该模式的基本架构进行说明：<br>
+![服务端部署架构]()
+架构说明： <br>
+BERT模型服务端：加载模型，进行实时预测的服务； 使用的是 BERT-BiLSTM-CRF-NER提供的bert-base；<br>
+API服务端：调用实时预测服务，为应用提供API接口的服务，用flask编写；<br>
+应用端：最终的应用端； 我这里为了简便，并没有编写网页，直接调用了api接口。<br>
+### Step1:数据准备
+同模式1中的Step1介绍。
+### Step2:模型训练
+同模式1中的Step2介绍。
+### Step3:模型转换
+运行如下命令：
+```Bash
+bash model_convert.sh
+```
+model_convert.sh参数说明：
+```Bash
+export BERT_BASE_DIR=./chinese_roberta_zh_l12 #训练模型时使用的预训练语言模型所在路径
+export TRAINED_CLASSIFIER=./output #训练好的模型输出的路径
+export EXP_NAME=mobile_0_roberta_base #训练后保存的模型命名
+
+python freeze_graph.py \
+    -bert_model_dir $BERT_BASE_DIR \
+    -model_dir $TRAINED_CLASSIFIER/$EXP_NAME \
+    -max_seq_len 128 #注意，这里的max_seq_len应与训练的脚本train.sh设置的max_seq_length参数值保持一致
+```
+### Step4:模型部署
+===TODO===
+### Step5:应用端
 ===TODO===
