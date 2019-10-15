@@ -144,7 +144,7 @@ if do_export:
 ### Step4：线下实时预测
 运行test_serving.py文件，即可进行线下实时预测。<br>
 运行效果如下所示：<br>
-![运行效果图]<br>
+![运行效果图]()<br>
 详细说明：导出模型后，就不需要第 859 行那个 estimator 对象了，可以自行从刚刚的导出模型目录加载模型，代码如下：<br>
 ```Python
 predict_fn = tf.contrib.predictor.from_saved_model('/exported/1571054350')
@@ -214,10 +214,14 @@ sudo pip install flask_compress
 sudo pip install flask_cors
 sudo pip install flask_json
 ```
-我这里的配置是2个GTX 1080 Ti，这个时候双卡的优势终于发挥出来了，GPU 1用于预测，GPU 0还可以继续训练模型。
+我这里的配置是2个GTX 1080 Ti，这个时候双卡的优势终于发挥出来了，GPU 1用于预测，GPU 0还可以继续训练模型。<br>
+部署成功示例图如下：<br>
+![部署成功示例图]()
 ### Step5:应用端
 运行如下命令：
 ```Bash
 python api/api_service_flask.py
 ```
-即可通过制定api接口访问部署的服务器。
+即可通过指定api接口(本项目中是http://192.168.9.23:8910/predict_online?text=我好开心)访问部署的服务器。<br>
+通过浏览器进行请求：
+![浏览器请求]()
