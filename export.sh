@@ -4,7 +4,7 @@
 export BERT_BASE_DIR=./chinese_roberta_zh_l12
 export DATA_DIR=./dat
 export TRAINED_CLASSIFIER=./output
-export MODEL_NAME=mobile_0_roberta
+export MODEL_NAME=mobile_0_roberta_base
 
 python run_classifier_serving.py \
   --task_name=setiment \
@@ -18,7 +18,7 @@ python run_classifier_serving.py \
   --max_seq_length=128 \
   --train_batch_size=32 \
   --learning_rate=2e-5 \
-  --num_train_epochs=2.0 \
+  --num_train_epochs=1.0 \
   --output_dir=$TRAINED_CLASSIFIER/$MODEL_NAME \
   --do_export=True \
   --export_dir=exported

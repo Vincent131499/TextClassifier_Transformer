@@ -180,7 +180,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     return feature
 
 if __name__ == '__main__':
-    predict_fn = tf.contrib.predictor.from_saved_model('exported/1570865706')
+    predict_fn = tf.contrib.predictor.from_saved_model('exported/1571054350')
     label_list = ["-1", "0", "1"]
     max_seq_length = 128
     tokenizer = tokenization.FullTokenizer(vocab_file='chinese_roberta_zh_l12/vocab.txt', do_lower_case=True)

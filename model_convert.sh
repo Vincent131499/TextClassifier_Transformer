@@ -4,7 +4,7 @@
 
 export BERT_BASE_DIR=./chinese_roberta_zh_l12
 export TRAINED_CLASSIFIER=./output
-export EXP_NAME=mobile_0_roberta
+export EXP_NAME=mobile_0_roberta_base_epoch1
 
 python freeze_graph.py \
     -bert_model_dir $BERT_BASE_DIR \

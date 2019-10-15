@@ -7,7 +7,7 @@ rm -rf tmp*
 
 export BERT_BASE_DIR=./chinese_roberta_zh_l12
 export TRAINED_CLASSIFIER=./output
-export EXP_NAME=mobile_0_roberta
+export EXP_NAME=mobile_0_roberta_base_epoch1
 
 bert-base-serving-start \
     -model_dir $TRAINED_CLASSIFIER/$EXP_NAME \
