@@ -216,4 +216,8 @@ sudo pip install flask_json
 ```
 我这里的配置是2个GTX 1080 Ti，这个时候双卡的优势终于发挥出来了，GPU 1用于预测，GPU 0还可以继续训练模型。
 ### Step5:应用端
-
+运行如下命令：
+```Bash
+python api/api_service_flask.py
+```
+即可通过制定api接口访问部署的服务器。
