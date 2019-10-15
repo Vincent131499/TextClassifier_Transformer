@@ -7,6 +7,13 @@ Bert-wwm、Roberta、ALBert以及ERNIE1.0.<br>
 ## 运行环境
 * Python3.6+<br>
 * Tensorflow1.10+/Tensorflow-gpu1.10+<br>
+<br>
+提供知名的预训练语言模型下载地址（其中百度开源的Ernie模型已转换成tf格式）：<br>
+Bert-base:链接：https://pan.baidu.com/s/18h9zgvnlU5ztwaQNnzBXTg 提取码：9r1z <br>
+Roberta:链接：https://pan.baidu.com/s/1FBpok7U9ekYJRu1a8NSM-Q 提取码：i50r <br>
+Bert-wwm:链接：链接：https://pan.baidu.com/s/1lhoJCT_LkboC1_1YXk1ItQ 提取码：ejt7 <br>
+ERNIE1.0:链接：链接：https://pan.baidu.com/s/1S6MI8rQyQ4U7dLszyb73Yw 提取码：gc6f <br>
+<br>
 ## 项目说明
 主要分为两种运行模式：<br>
 模式1：线下实时预测<br>
