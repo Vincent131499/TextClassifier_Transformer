@@ -114,7 +114,7 @@ export TRAINED_CLASSIFIER=./output
 export MODEL_NAME=mobile_0_roberta_base
 ```
 会在指定的exported目录下生成以一个时间戳命名的模型目录。<br>
-详细说明：详细说明：run_classifier.py 主要设计为单次运行的目的，如果把 do_predict 参数设置成 True，倒也确实可以预测，但输入样本是基于文件的，并且不支持将模型持久化在内存里进行 serving，因此需要自己改一些代码，达到两个目的：<br>
+详细说明：run_classifier.py 主要设计为单次运行的目的，如果把 do_predict 参数设置成 True，倒也确实可以预测，但输入样本是基于文件的，并且不支持将模型持久化在内存里进行 serving，因此需要自己改一些代码，达到两个目的：<br>
 （1）允许将模型加载到内存里，即：允许一次加载，多次调用。<br>
 （2）允许读取非文件中的样本进行预测。譬如从标准输入流读取样本输入。<br>
 * 将模型加载到内存里<br>
@@ -144,7 +144,7 @@ if do_export:
 ### Step4：线下实时预测
 运行test_serving.py文件，即可进行线下实时预测。<br>
 运行效果如下所示：<br>
-![运行效果图]()<br>
+![运行效果图](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/serving_offline.jpg)<br>
 详细说明：导出模型后，就不需要第 859 行那个 estimator 对象了，可以自行从刚刚的导出模型目录加载模型，代码如下：<br>
 ```Python
 predict_fn = tf.contrib.predictor.from_saved_model('/exported/1571054350')
@@ -169,7 +169,7 @@ while True:
 ```
 ## 模式2：服务端实时预测
 首先针对该模式的基本架构进行说明：<br>
-![服务端部署架构]()
+![服务端部署架构](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/serving_deploy_arcticture.jpg)
 架构说明： <br>
 BERT模型服务端：加载模型，进行实时预测的服务； 使用的是 BERT-BiLSTM-CRF-NER提供的bert-base；<br>
 API服务端：调用实时预测服务，为应用提供API接口的服务，用flask编写；<br>
@@ -216,12 +216,12 @@ sudo pip install flask_json
 ```
 我这里的配置是2个GTX 1080 Ti，这个时候双卡的优势终于发挥出来了，GPU 1用于预测，GPU 0还可以继续训练模型。<br>
 部署成功示例图如下：<br>
-![部署成功示例图]()
+![部署成功示例图](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/deploy-success.jpg)
 ### Step5:应用端
 运行如下命令：
 ```Bash
 python api/api_service_flask.py
 ```
 即可通过指定api接口(本项目中是http://192.168.9.23:8910/predict_online?text=我好开心)访问部署的服务器。<br>
-通过浏览器进行请求：
-![浏览器请求]()
+通过浏览器进行请求：<br>
+![浏览器请求](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/api_example.jpg)
