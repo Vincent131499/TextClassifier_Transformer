@@ -14,6 +14,7 @@ Roberta:链接：https://pan.baidu.com/s/1FBpok7U9ekYJRu1a8NSM-Q 提取码：i50
 Bert-wwm:链接：链接：https://pan.baidu.com/s/1lhoJCT_LkboC1_1YXk1ItQ 提取码：ejt7 <br>
 ERNIE1.0:链接：链接：https://pan.baidu.com/s/1S6MI8rQyQ4U7dLszyb73Yw 提取码：gc6f <br>
 <br>
+
 ## 项目说明
 主要分为两种运行模式：<br>
 模式1：线下实时预测<br>
