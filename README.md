@@ -170,7 +170,7 @@ while True:
 ## 模式2：服务端实时预测
 首先针对该模式的基本架构进行说明：<br>
 ![服务端部署架构](https://github.com/Vincent131499/TextClassifier_BERT/raw/master/imgs/serving_deploy_arcticture.jpg)
-架构说明： <br>
+<br>架构说明： <br>
 BERT模型服务端：加载模型，进行实时预测的服务； 使用的是 BERT-BiLSTM-CRF-NER提供的bert-base；<br>
 API服务端：调用实时预测服务，为应用提供API接口的服务，用flask编写；<br>
 应用端：最终的应用端； 我这里为了简便，并没有编写网页，直接调用了api接口。<br>
