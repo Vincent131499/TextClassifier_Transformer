@@ -183,6 +183,7 @@ API服务端：调用实时预测服务，为应用提供API接口的服务，�
 ```Bash
 bash model_convert.sh
 ```
+会在$TRAINED_CLASSIFIER/$EXP_NAME生成pb格式的模型文件<br>
 model_convert.sh参数说明：
 ```Bash
 export BERT_BASE_DIR=./chinese_roberta_zh_l12 #训练模型时使用的预训练语言模型所在路径
@@ -195,6 +196,24 @@ python freeze_graph.py \
     -max_seq_len 128 #注意，这里的max_seq_len应与训练的脚本train.sh设置的max_seq_length参数值保持一致
 ```
 ### Step4:模型部署
-===TODO===
+运行如下命令：
+```Bash
+bash bert_classify_server.sh 
+```
+提示：在运行这个命令前需要保证安装了bert-base这个库，使用如下命令进行安装：
+```Bash
+pip install bert-base
+```
+**注意**：<br>
+port 和 port_out 这两个参数是API调用的端口号，默认是5555和5556,如果你准备部署多个模型服务实例，那一定要指定自己的端口号，避免冲突。
+我这里是改为： 5575 和 5576<br>
+如果报错没运行起来，可能是有些模块没装上,都是 bert_base/server/http.py里引用的，装上就好了：
+```
+sudo pip install flask 
+sudo pip install flask_compress
+sudo pip install flask_cors
+sudo pip install flask_json
+```
+我这里的配置是2个GTX 1080 Ti，这个时候双卡的优势终于发挥出来了，GPU 1用于预测，GPU 0还可以继续训练模型。
 ### Step5:应用端
-===TODO===
+
