@@ -2,15 +2,12 @@
 """  
    Description :   使用tf-serving部署，使用requests调用接口
    Author :        MeteorMan
-   date：          2020/2/28
+   date：          2020/3/4
 """
-
-
 
 import json
 import numpy as np
 import requests
-# from zh.model.utils import MNISTLoader
 import pickle
 import os
 import tensorflow as tf
@@ -190,7 +187,7 @@ max_seq_length = 64
 tokenizer = tokenization.FullTokenizer(vocab_file='./vocab.txt',
                                        do_lower_case=True)
 
-def predict_offline():
+def predict_offline_single():
     while True:
         import time
         question = input("> ")
@@ -208,8 +205,11 @@ def predict_offline():
             ]
             })
         headers = {"content-type": "application/json"}
+        # json_response = requests.post(
+        #     'http://127.0.0.1:9001/v1/models/bert_domain_classify:predict',
+        #     data=data, headers=headers)
         json_response = requests.post(
-            'http://127.0.0.1:9001/v1/models/bert_domain_classify:predict',
+            'http://192.168.0.105:9001/v1/models/bert_classify:predict',
             data=data, headers=headers)
         end_time = time.time()
         print('Spend time {}sec'.format(end_time-start_time))
@@ -218,4 +218,47 @@ def predict_offline():
         label = label_list[predictions.argmax()]
         print(label)
 
-predict_offline()
+
+def predict_offline_batch():
+    while True:
+        import time
+        question = input("> ")
+        start_time = time.time()
+        sents_list = question.split('|&|')
+        instances_dict = {}
+        instance_list = []
+        for sent in sents_list:
+            predict_example = InputExample("100", sent, None, '婚姻家庭')
+            feature = convert_single_example(100, predict_example, label_list, max_seq_length, tokenizer)
+            instance_list.append(
+                {
+                    "input_ids": feature.input_ids,
+                    "input_mask": feature.input_mask,
+                    "segment_ids": feature.segment_ids,
+                    "label_ids": [feature.label_id]
+                }
+            )
+        instances_dict['instances'] = instance_list
+
+        data = json.dumps({
+            "instances": instances_dict['instances']
+            })
+        headers = {"content-type": "application/json"}
+        # json_response = requests.post(
+        #     'http://127.0.0.1:9001/v1/models/bert_domain_classify:predict',
+        #     data=data, headers=headers)
+        json_response = requests.post(
+            'http://192.168.0.105:9001/v1/models/bert_classify:predict',
+            data=data, headers=headers)
+        end_time = time.time()
+        print('Spend time {}sec'.format(end_time-start_time))
+        predictions = np.array(json.loads(json_response.text)['predictions'])
+        print(predictions)
+        # print(np.argmax(predictions, axis=-1))
+        for pred in predictions:
+
+            label = label_list[pred.argmax()]
+            print(label)
+
+predict_offline_single()
+# predict_offline_batch()
