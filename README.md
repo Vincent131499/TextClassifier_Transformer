@@ -4,6 +4,10 @@ Bert-wwm、Roberta、ALBert以及ERNIE1.0.<br>
 该项目支持两种预测方式：<br>
 （1）线下实时预测<br>
 （2）服务端实时预测<br>
+
+## 新增改动
+2020-03-04:模型部署增加tf-serving机制，具体实施方式见[This Blog](https://Vincent131499.github.io/2020/02/28/以BERT分类为例阐述模型部署关键技术)
+
 ## 运行环境
 * Python3.6+<br>
 * Tensorflow1.10+/Tensorflow-gpu1.10+<br>
