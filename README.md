@@ -1,12 +1,16 @@
-# TextClassifier_BERT
+# TextClassifier_Transformer
 个人基于谷歌开源的BERT编写的文本分类器（基于微调方式），可自由加载NLP领域知名的预训练语言模型BERT、
-Bert-wwm、Roberta、ALBert以及ERNIE1.0.<br>
+Roberta、ALBert及其wwm版本，同时适配ERNIE1.0.<br>
 该项目支持两种预测方式：<br>
 （1）线下实时预测<br>
 （2）服务端实时预测<br>
 
 ## 新增改动
-2020-03-04:模型部署增加tf-serving机制，具体实施方式见[This Blog](https://Vincent131499.github.io/2020/02/28/以BERT分类为例阐述模型部署关键技术)
+2020-03-25:<br>
+(1)项目名由'TextClassifier_BERT'更改为'TextClassifier_Transformer';<br>
+(2)新增ELECTRA、AlBert两个预训练模型。<br>
+2020-03-04:<br>
+模型部署增加tf-serving机制，具体实施方式见[This Blog](https://Vincent131499.github.io/2020/02/28/以BERT分类为例阐述模型部署关键技术)
 
 ## 运行环境
 * Python3.6+<br>
@@ -17,6 +21,8 @@ Bert-base:链接：https://pan.baidu.com/s/18h9zgvnlU5ztwaQNnzBXTg 提取码：9
 Roberta:链接：https://pan.baidu.com/s/1FBpok7U9ekYJRu1a8NSM-Q 提取码：i50r <br>
 Bert-wwm:链接：链接：https://pan.baidu.com/s/1lhoJCT_LkboC1_1YXk1ItQ 提取码：ejt7 <br>
 ERNIE1.0:链接：链接：https://pan.baidu.com/s/1S6MI8rQyQ4U7dLszyb73Yw 提取码：gc6f <br>
+ELECTRA-Tiny:链接：https://pan.baidu.com/s/11QaL7A4YSCYq4YlGyU1_vA 提取码：27jb  <br>
+AlBert-base:链接：https://pan.baidu.com/s/1U7Zx73ngci2Oqp3SLaVOaw 提取码：uijw <br>
 <br>
 
 ## 项目说明
