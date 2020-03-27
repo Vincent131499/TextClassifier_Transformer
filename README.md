@@ -9,7 +9,7 @@ Roberta、ALBert及其wwm版本，同时适配ERNIE1.0.<br>
 2020-03-25:<br>
 (1)项目名由'TextClassifier_BERT'更改为'TextClassifier_Transformer';<br>
 (2)新增ELECTRA、AlBert两个预训练模型。<br>
-**注意：在使用AlBert时，请将该项目下的modeling.py文件更新为ALBert项目中下的modeling.py，而后在运行**
+**注意：在使用AlBert时，请将该项目下的modeling.py文件更新为ALBert项目中下的modeling.py，而后在运行**<br>
 2020-03-04:<br>
 模型部署增加tf-serving机制，具体实施方式见[This Blog](https://Vincent131499.github.io/2020/02/28/以BERT分类为例阐述模型部署关键技术)
 
