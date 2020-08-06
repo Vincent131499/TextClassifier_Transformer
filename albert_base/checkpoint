@@ -1,2 +1,0 @@
-model_checkpoint_path: "/cns/yo-d/home/deep-language-generation/albert/exported_models/v_zh/albert_base/model.ckpt-best"
-all_model_checkpoint_paths: "/cns/yo-d/home/deep-language-generation/albert/exported_models/v_zh/albert_base/model.ckpt-best"
