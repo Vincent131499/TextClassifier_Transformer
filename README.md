@@ -6,11 +6,18 @@ Roberta、ALBert及其wwm版本，同时适配ERNIE1.0.<br>
 （2）服务端实时预测<br>
 
 ## 新增改动
-2020-03-25:<br>
+**2020-08-15:**<br>
+目前项目整体面向ALbert的训练-部署；若想测试如BERT、Roberta、Electra等模型，需要将项目目录下的modeling文件替换为[这个文件](https://github.com/google-research/bert/blob/master/modeling.py)，而后针对run_classifier_serving.py作出以下两点变动：<br>
+变动1：create_model()函数将model = modeling.AlbertModel()替换为model = modeling.BertModel()；<br>
+变动2：将bert_config = modeling.AlbertConfig.from_json_file(FLAGS.bert_config_file)该处替换为bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)<br>
+以上两个文件的操作完成后，在train.sh、export.sh等脚本文件中将预训练模型的路径更改成BERT系列路径，即可跑通本项目。<br>
+
+**2020-03-25:**<br>
 (1)项目名由'TextClassifier_BERT'更改为'TextClassifier_Transformer';<br>
 (2)新增ELECTRA、AlBert两个预训练模型。<br>
 **注意：在使用AlBert时，请将该项目下的modeling.py文件更新为ALBert项目中下的modeling.py，而后在运行**<br>
-2020-03-04:<br>
+
+**2020-03-04:**<br>
 模型部署增加tf-serving机制，具体实施方式见[This Blog](https://Vincent131499.github.io/2020/02/28/以BERT分类为例阐述模型部署关键技术)
 
 ## 运行环境
